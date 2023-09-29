@@ -1,7 +1,7 @@
-from model import TextClassification
+from src.model import TextClassification
 import torch
-from preprocess import Preprocess
-from parser_param import parameter_parser
+from src.preprocess import Preprocess
+from src.parser_param import parameter_parser
 import torch.nn.functional as F
 from fastapi import FastAPI
 import uvicorn
@@ -16,7 +16,7 @@ class Inference:
             print("Run on CPU")
         args = parameter_parser()
         self.model = TextClassification(args)
-        self.model = torch.load("model/viet_nam_classification.ckpt",map_location=torch.device(self.device))
+        self.model.load_state_dict(torch.load("model/viet_nam_classification.pt",map_location=self.device))
         self.model.to(self.device)
         self.model.eval()
         self.preprocess = Preprocess(args)
